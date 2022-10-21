@@ -1,3 +1,7 @@
+let playerWins = 0;
+let computerWins = 0;
+let roundsPlayed = 0;
+
 function getComputerChoice() {
     // randomly pick a choice for the computer
     const rand = Math.floor(Math.random()*10)
@@ -11,7 +15,9 @@ function getComputerChoice() {
 }
 
 function playRound(playerSelection, computerSelection) {
-    if (playerSelection === "Rock") {
+    // Compares the player selection and computer selection and returns the result.
+    if (playerSelection === computerSelection) { return "Tie Game! Try Again" }
+    else if (playerSelection === "Rock") {
         if (computerSelection === "Paper") { return "You Lose! Paper beats Rock" }
         if (computerSelection === "Scissors") { return "You Win! Rock beats Scissors"}
     } else if (playerSelection === "Paper") {
@@ -20,14 +26,39 @@ function playRound(playerSelection, computerSelection) {
     } else if (playerSelection === "Scissors") {
         if (computerSelection === "Rock") { return "You Lose! Rock beats Scissors" }
         if (computerSelection === "Paper") { return "You Win! Scissors beats Paper" }
-    } else if (playerSelection === computerSelection) { return "Tie Game! Try Again" }
-    else { return "Not a valid option. Pick Rock, Paper, or Scissors."}
+    } else { return "Not a valid option. Pick Rock, Paper, or Scissors."}
 }
 
-function game() {
-    
+function game(playerChoice) {
+    // The main game loop that runs when the player chooses a selection.
+
+    const computerChoice = getComputerChoice();
+
+    console.log("Player Choice: " + playerChoice);
+    console.log("Computer Choice: " + computerChoice);
+
+    const result = playRound(playerChoice, computerChoice);
+
+    console.log("Result: " + result);
+
+    const output = updateResults(result);
+
+    document.getElementById("result").innerText = output
 }
 
-const playerSelection = "Rock"
-const computerSelection = getComputerChoice();
-console.log(playRound(playerSelection, computerSelection));
+function updateResults(result) {
+    // Updates the player win count, the computer win count and updates the round count.
+    // Returns a string with the result, the updated score, and instructions.
+
+    if (result.includes("Win!")) {
+        playerWins++;
+    }
+
+    if (result.includes("Lose!")) {
+        computerWins++;
+    }
+
+    roundsPlayed++;
+
+    return `${result}. \n Player Wins: ${playerWins}  Computer Wins: ${computerWins}  Rounds Played: ${roundsPlayed} \n Pick another option to play again or refresh the page to start over.`
+}
